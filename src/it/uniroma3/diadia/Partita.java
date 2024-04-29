@@ -13,11 +13,8 @@ import it.uniroma3.diadia.giocatore.Giocatore;
 
 public class Partita {
 
-	static final private int CFU_INIZIALI = 20;
-
 	private Stanza stanzaCorrente;
 	private boolean finita;
-	private int cfu;
 	private Labirinto labirinto;
 	private Giocatore giocatore;
 	
@@ -25,7 +22,6 @@ public class Partita {
 		this.labirinto = new Labirinto();
 		this.stanzaCorrente=this.labirinto.getStanzaIniziale();
 		this.finita = false;
-		this.cfu = CFU_INIZIALI;
 		this.giocatore = new Giocatore();
 	}
 
@@ -50,7 +46,11 @@ public class Partita {
 	 * @return vero se partita finita
 	 */
 	public boolean isFinita() {
-		return finita || vinta() || (cfu == 0);
+		return finita || vinta() || (this.giocatore.getCfu() == 0);
+	}
+	
+	public boolean giocatoreIsVivo() {
+		return this.giocatore.getCfu() > 0;
 	}
 
 	/**
