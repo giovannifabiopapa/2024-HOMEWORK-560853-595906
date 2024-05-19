@@ -35,7 +35,7 @@ public class GiocatoreTest {
 	@Test // verifico che la borsa sia vuota
 	public void testGetBorsaVuota() {
 		Giocatore giocatore = new Giocatore();
-		assertTrue(giocatore.getBorsa().isEmpty());
+		assertTrue(giocatore.getBorsa().getAttrezzi().isEmpty());
 	}
 	
 	@Test // verifico che la borsa sia piena
@@ -45,7 +45,7 @@ public class GiocatoreTest {
 		Attrezzo attrezzo = new Attrezzo("attrezzo",9);
 		borsa.addAttrezzo(attrezzo);
 		giocatore.getBorsa().addAttrezzo(attrezzo);
-		assertFalse(giocatore.getBorsa().isEmpty());
+		assertFalse(giocatore.getBorsa().getAttrezzi().isEmpty());
 	}
 	
 	@Test // nella borsa ho un determinato attrezzo

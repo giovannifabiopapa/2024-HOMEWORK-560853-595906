@@ -9,14 +9,12 @@ public interface Comando {
 	 */
 	public void esegui(Partita partita);
 
-	/**
+	/*
 	 * set parametro del comando
 	 */
 	public void setParametro(String parametro);
-	
+
 	public void setIO(IO io);
-		
 	public String getNome();
 	public String getParametro();
-	
 }

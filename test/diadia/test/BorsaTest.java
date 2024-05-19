@@ -26,7 +26,7 @@ public class BorsaTest {
 	public void testGetPesoConDueAttrezzi() {
 		Borsa borsa = new Borsa();
 		Attrezzo a1 = new Attrezzo("spada",1);
-		Attrezzo a2 = new Attrezzo("spada",2);
+		Attrezzo a2 = new Attrezzo("pistola",2);
 		borsa.addAttrezzo(a1);
 		borsa.addAttrezzo(a2);
 		assertEquals(borsa.getPeso(), (a1.getPeso() + a2.getPeso()));
@@ -46,7 +46,7 @@ public class BorsaTest {
 		Attrezzo a1 = new Attrezzo("spada",1);
 		borsa.addAttrezzo(a1);
 		borsa.removeAttrezzo("spada");
-		assertTrue(borsa.isEmpty());
+		assertTrue(borsa.getAttrezzi().isEmpty());
 	}
 	
 	@Test	// controllo che non rimuovo nulla se non ho quello che cerco
@@ -55,7 +55,7 @@ public class BorsaTest {
 		Attrezzo a1 = new Attrezzo("spada",1);
 		borsa.addAttrezzo(a1);
 		borsa.removeAttrezzo("ascia");
-		assertFalse(borsa.isEmpty());
+		assertFalse(borsa.getAttrezzi().isEmpty());
 	}
 	
 	/* test per il metodo addAttrezzo */
@@ -65,7 +65,7 @@ public class BorsaTest {
 		Borsa borsa = new Borsa();
 		Attrezzo a1 = new Attrezzo("spada",1);
 		borsa.addAttrezzo(a1);
-		assertFalse(borsa.isEmpty());
+		assertFalse(borsa.getAttrezzi().isEmpty());
 	}
 	
 	@Test	// controllo che non si possa aggiungere un attrezzo con peso superiore a 10
@@ -73,7 +73,7 @@ public class BorsaTest {
 		Borsa borsa = new Borsa();
 		Attrezzo a1 = new Attrezzo("spada",12);
 		borsa.addAttrezzo(a1);
-		assertTrue(borsa.isEmpty());
+		assertTrue(borsa.getAttrezzi().isEmpty());
 	}
 	
 	/* test per il metodo isEmpty */
@@ -81,7 +81,7 @@ public class BorsaTest {
 	@Test	// controllo che inizialmente la borsa sia vuota
 	public void testIsEmpty() {
 		Borsa borsa = new Borsa();
-		assertTrue(borsa.isEmpty());
+		assertTrue(borsa.getAttrezzi().isEmpty());
 	}
 	
 	@Test	// controllo che dopo aver aggiunto un attrezzo la borsa non sia più vuota
@@ -89,6 +89,6 @@ public class BorsaTest {
 		Borsa borsa = new Borsa();
 		Attrezzo a1 = new Attrezzo("spada",5);
 		borsa.addAttrezzo(a1);
-		assertFalse(borsa.isEmpty());
+		assertFalse(borsa.getAttrezzi().isEmpty());
 	}
 }

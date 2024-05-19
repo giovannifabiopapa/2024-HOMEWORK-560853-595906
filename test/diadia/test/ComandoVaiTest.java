@@ -1,59 +1,103 @@
 package diadia.test;
 
 import static org.junit.Assert.*;
-
 import org.junit.*;
 import org.junit.Test;
 
-import it.uniroma3.diadia.Partita;
-import it.uniroma3.diadia.ambienti.Stanza;
-import it.uniroma3.diadia.comandi.ComandoVai;
 import it.uniroma3.diadia.comandi.Comando;
+import it.uniroma3.diadia.comandi.ComandoVai;
+import it.uniroma3.diadia.ambienti.Labirinto;
+import it.uniroma3.diadia.ambienti.Stanza;
+import it.uniroma3.diadia.DiaDia;
+import it.uniroma3.diadia.Fixture;
 import it.uniroma3.diadia.IO;
 import it.uniroma3.diadia.IOConsole;
+import it.uniroma3.diadia.Partita;
 
 public class ComandoVaiTest {
-	
-	/*
-	 * per come ci ha spiegato lui il poliformismo nell'interfaccia comando abbiamo i metodi
-	 * quindi il tipo statico è metodo mentre il tipo dinamico rappresenta l'implementazione che segue
-	 * 
-	 * usare Comando è più comodo perchè se poi quel comandoVai metti caso cambia nome basta che cambi la roba
-	 * dopo il new così da fargli seguire l'implementazione giusta
-	 */
 
-	@Test	// Controllo che andando ad est mi trovo in N11
-	public void testComandoVai_AndandoAdEstMiTrovoInN11() {
-		IO io = new IOConsole();
-		Partita partita = new Partita();
-		Stanza a = partita.getStanzaCorrente().getStanzaAdiacente("est");
-		Comando comando = new ComandoVai();
-		comando.setIO(io);
-		comando.setParametro("est");
-		comando.esegui(partita);
-		assertEquals(a, partita.getStanzaCorrente());
+	private IO io;
+	
+	private Fixture simulazione;
+	private DiaDia gioco;
+	
+	private Stanza s1;
+	private Labirinto labirinto;
+	private Partita p;
+	private Comando vai;
+
+	@Before
+	public void setUp() {
+		this.io = new IOConsole();
+		
+		this.simulazione = new Fixture();
+		Labirinto labirinto = this.simulazione.fixturePartitaDifficile();
+		this.gioco = new DiaDia(labirinto, io);
+		
+		this.labirinto = new Labirinto();
+		this.p = new Partita(this.labirinto);
+		this.vai = new ComandoVai();
+		this.vai.setIO(io);
 	}
 
-	@Test	// Controllo che andando ad est non mi trovo in laboratorio
-	public void testComandoVai_AndandoAdEstNonMiTrovoInLaboratorio() {
-		IO io = new IOConsole();
-		Partita partita = new Partita();
-		Stanza a = partita.getStanzaCorrente().getStanzaAdiacente("ovest");
-		Comando comando = new ComandoVai();
-		comando.setIO(io);
-		comando.setParametro("est");
-		comando.esegui(partita);
-		assertNotEquals(a, partita.getStanzaCorrente());
+	@Test
+	public void testComandoVai_AndandoAEstMiTrovoinN11() {
+		this.s1 = this.p.getStanzaCorrente().getStanzaAdiacente("est");
+		this.vai.setParametro("est");
+		this.vai.esegui(p);
+		assertEquals(this.s1, this.p.getStanzaCorrente());
 	}
-	
-	@Test	// Controllo che andando a nord trovo una stanza
+
+	@Test
+	public void testComandoVai_AndandoAEstNonMiTrovoInLaboratorio() {
+		this.s1 = this.p.getStanzaCorrente().getStanzaAdiacente("ovest");
+		this.vai.setParametro("est");
+		this.vai.esegui(p);
+		assertNotEquals(this.s1, this.p.getStanzaCorrente());
+	}
+
+	@Test
 	public void testComandoVai_AndandoANordEsisteUnaStanza() {
-		IO io = new IOConsole();
-		Partita partita = new Partita();
-		Comando comando = new ComandoVai();
-		comando.setIO(io);
-		comando.setParametro("nord");
-		comando.esegui(partita);
-		assertNotNull(partita.getStanzaCorrente());
+		this.vai.setParametro("nord");
+		this.vai.esegui(p);
+		assertNotNull(this.p.getStanzaCorrente());
+	}
+	
+	@Test
+	public void testComandoVaiSimulazione() {
+		this.gioco.processaIstruzione("vai nord");
+		assertEquals(this.gioco.getPartita().getLabirinto().getStanzaIniziale().
+				getStanzaAdiacente("nord"), this.gioco.getPartita().getStanzaCorrente());
+		assertEquals("Bagno", this.gioco.getPartita().getStanzaCorrente().getNome());
+		
+		this.gioco.processaIstruzione("vai est");
+		assertNull(this.gioco.getPartita().getStanzaCorrente().
+				getStanzaAdiacente("est"));
+		assertEquals("Bagno", this.gioco.getPartita().getStanzaCorrente().getNome());
+
+		this.gioco.processaIstruzione("vai sud");
+		assertEquals(this.gioco.getPartita().getLabirinto().getStanzaIniziale(), 
+				this.gioco.getPartita().getStanzaCorrente());
+		assertEquals("Atrio", this.gioco.getPartita().getStanzaCorrente().getNome());
+		
+		this.gioco.processaIstruzione("vai");
+		assertEquals(this.gioco.getPartita().getLabirinto().getStanzaIniziale(), 
+				this.gioco.getPartita().getStanzaCorrente());
+		assertEquals("Atrio", this.gioco.getPartita().getStanzaCorrente().getNome());
+				
+		this.gioco.processaIstruzione("vai ovest");
+		assertEquals(this.gioco.getPartita().getLabirinto().getStanzaIniziale().
+				getStanzaAdiacente("ovest"), this.gioco.getPartita().getStanzaCorrente());
+		assertEquals("Studio", this.gioco.getPartita().getStanzaCorrente().getNome());
+		
+		this.gioco.processaIstruzione("vai ovest");
+		assertEquals(this.gioco.getPartita().getLabirinto().getStanzaIniziale().
+				getStanzaAdiacente("ovest").getStanzaAdiacente("ovest"), this.gioco.getPartita().getStanzaCorrente());
+		assertEquals("Riservata", this.gioco.getPartita().getStanzaCorrente().getNome());
+		
+		this.gioco.processaIstruzione("vai nord");
+		assertEquals(this.gioco.getPartita().getLabirinto().getStanzaIniziale().
+				getStanzaAdiacente("ovest").getStanzaAdiacente("ovest"), this.gioco.getPartita().getStanzaCorrente());
+		assertEquals("Riservata", this.gioco.getPartita().getStanzaCorrente().getNome());
 	}
 }

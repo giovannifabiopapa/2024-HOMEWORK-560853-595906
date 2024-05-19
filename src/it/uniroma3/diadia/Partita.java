@@ -1,5 +1,7 @@
 package it.uniroma3.diadia;
+
 import it.uniroma3.diadia.ambienti.Labirinto;
+
 import it.uniroma3.diadia.ambienti.Stanza;
 import it.uniroma3.diadia.giocatore.Giocatore;
 
@@ -14,23 +16,35 @@ import it.uniroma3.diadia.giocatore.Giocatore;
 public class Partita {
 
 	private Stanza stanzaCorrente;
-	private boolean finita;
 	private Labirinto labirinto;
 	private Giocatore giocatore;
+	private boolean finita;
 	
-	public Partita(){
-		this.labirinto = new Labirinto();
-		this.stanzaCorrente=this.labirinto.getStanzaIniziale();
-		this.finita = false;
+	public Partita(Labirinto labirinto){
+		this.labirinto = labirinto;
 		this.giocatore = new Giocatore();
+		this.stanzaCorrente = this.labirinto.getStanzaIniziale();
+;		this.finita = false;
 	}
 
 	public void setStanzaCorrente(Stanza stanzaCorrente) {
 		this.stanzaCorrente = stanzaCorrente;
 	}
+	
+	public void setLabirinto(Labirinto labirinto) {
+		this.labirinto = labirinto;
+	}
 
 	public Stanza getStanzaCorrente() {
 		return this.stanzaCorrente;
+	}
+	
+	public Labirinto getLabirinto() {
+		return this.labirinto;
+	}
+	
+	public Giocatore getGiocatore() {
+		return this.giocatore;
 	}
 	
 	/**
@@ -38,7 +52,14 @@ public class Partita {
 	 * @return vero se partita vinta
 	 */
 	public boolean vinta() {
-		return this.getStanzaCorrente()== this.labirinto.getStanzaVincente();
+		return this.getStanzaCorrente().equals(this.labirinto.getStanzaVincente());
+	}
+	
+	/*
+	 * Restituisce vero se il giocatore ha ancora cfu a disposizione
+	 */
+	public boolean giocatoreIsVivo() {
+		return this.giocatore.getCfu() > 0;
 	}
 
 	/**
@@ -48,23 +69,12 @@ public class Partita {
 	public boolean isFinita() {
 		return finita || vinta() || (this.giocatore.getCfu() == 0);
 	}
-	
-	public boolean giocatoreIsVivo() {
-		return this.giocatore.getCfu() > 0;
-	}
 
 	/**
 	 * Imposta la partita come finita
-	 *
 	 */
 	public void setFinita() {
 		this.finita = true;
 	}
-
-	public Giocatore getGiocatore() {
-		return giocatore;
-	}
-	public Labirinto getLabirinto() {
-		return labirinto;
-	}
 }
+

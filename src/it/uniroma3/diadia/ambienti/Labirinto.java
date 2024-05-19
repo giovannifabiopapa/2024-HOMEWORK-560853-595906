@@ -1,4 +1,5 @@
 package it.uniroma3.diadia.ambienti;
+
 import it.uniroma3.diadia.attrezzi.Attrezzo;
 
 public class Labirinto {
@@ -7,29 +8,25 @@ public class Labirinto {
 	private Stanza stanzaVincente;
 	
 	public Labirinto() {
-		creaStanze();
+		creoLabirinto();
 	}
-
-    /**
-     * Crea tutte le stanze e le porte di collegamento
-     */
-    private void creaStanze() {
-
-		/* crea gli attrezzi */
+	
+	public void creoLabirinto() {
+		/**
+	     * Crea tutte le stanze e le porte di collegamento
+	     * Creo gli attrezzi
+	     */
     	Attrezzo lanterna = new Attrezzo("lanterna",3);
 		Attrezzo osso = new Attrezzo("osso",1);
-		Attrezzo spada = new Attrezzo("spada",0);
-		Attrezzo pistola = new Attrezzo("pistola",0);
-		Attrezzo ascia = new Attrezzo("ascia",0);
-		Attrezzo martello = new Attrezzo("martello",12);
-		Attrezzo falce = new Attrezzo("falce",9);
-		Attrezzo rastrello = new Attrezzo("rastrello",0);
-		Attrezzo zaino = new Attrezzo("zaino",0);
-		Attrezzo sasso = new Attrezzo("sasso",0);
-		Attrezzo torcia = new Attrezzo("torcia",0);
+		/*
+		 * Aggiunti per test
+		 */
+		Attrezzo spada = new Attrezzo("spada",2);
+		Attrezzo martello = new Attrezzo("martello",5);
 		Attrezzo penna = new Attrezzo("penna",0);
-    	
-		/* crea stanze del labirinto */
+		Attrezzo zaino = new Attrezzo("zaino",7);
+		
+		/* Crea stanze del labirinto */
 		Stanza atrio = new Stanza("Atrio");
 		Stanza aulaN11 = new Stanza("Aula N11");
 		Stanza aulaN10 = new Stanza("Aula N10");
@@ -53,24 +50,29 @@ public class Labirinto {
         /* pone gli attrezzi nelle stanze */
 		aulaN10.addAttrezzo(lanterna);
 		atrio.addAttrezzo(osso);
-		aulaN10.addAttrezzo(spada);
-		atrio.addAttrezzo(pistola);
-		atrio.addAttrezzo(ascia);
+		/*
+		 * Aggiunti per test
+		 */
+		atrio.addAttrezzo(spada);
 		atrio.addAttrezzo(martello);
-		atrio.addAttrezzo(falce);
-		atrio.addAttrezzo(rastrello);
-		atrio.addAttrezzo(zaino);
-		aulaN10.addAttrezzo(sasso);
-		aulaN10.addAttrezzo(torcia);
-		aulaN10.addAttrezzo(penna);
-
+		laboratorio.addAttrezzo(zaino);
+		biblioteca.addAttrezzo(penna);
+		
 		// il gioco comincia nell'atrio
-        this.stanzaIniziale = atrio;
-		this.stanzaVincente = biblioteca;
-    }
-    
-    public Stanza getStanzaIniziale() {
+        stanzaIniziale = atrio;  
+		stanzaVincente = biblioteca;	    	
+	}
+	
+	public void setStanzaIniziale(Stanza iniziale) {
+		this.stanzaIniziale = iniziale;
+	}
+
+	public Stanza getStanzaIniziale() {
 		return stanzaIniziale;
+	}
+	
+	public void setStanzaVincente(Stanza vincente) {
+		this.stanzaVincente = vincente;
 	}
 
 	public Stanza getStanzaVincente() {
